@@ -1,0 +1,12 @@
+﻿Serpent.obj : error LNK2019: unresolved external symbol __imp_glClear referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glewInit referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+Serpent.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+C:\Users\Epiphan\Documents\GitHub\Serpant\Dependencies\GLFW\lib-vc2019\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Epiphan\Documents\GitHub\Serpant\Dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Epiphan\Documents\GitHub\Serpant\x64\Debug\Serpent.exe : fatal error LNK1120: 9 unresolved externals
