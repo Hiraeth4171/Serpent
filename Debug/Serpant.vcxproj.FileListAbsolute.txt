@@ -1,2 +1,3 @@
 C:\Users\Epiphan\Documents\GitHub\Serpant\Debug\Serpent.exe
 C:\Users\Epiphan\Documents\GitHub\Serpant\Debug\Serpent.pdb
+C:\Users\Epiphan\Documents\GitHub\Serpent\Debug\Serpent.exe
