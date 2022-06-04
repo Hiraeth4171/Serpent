@@ -1,7 +1,7 @@
 
 .vs/
-/Debug/*
-/Dependencies/*
+Debug/
+Dependencies/
 *.rar
 *.filters
 *.vcxproj
