@@ -90,7 +90,7 @@ int main(void) {
 			renderer.Clear();
 
 			shader.Bind();
-			shader.SetUniform4f("u_Color", r, 0.3f, 0.6f, 1.0f);
+			shader.SetUniform4f("u_Color", r, 0.3f, 0.6f, 0.1f);
 			
 			renderer.Draw(va, ib, shader);
 
