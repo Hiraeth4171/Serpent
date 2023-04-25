@@ -9,11 +9,16 @@
 #include "VertexArray.h"
 #include <iostream>
 #include "Shader.h"
+#include "Page/Page.h"
+#include "Interpreter.h"
+#include "Generator.h"
+
+#define WIDTH 640
+#define HEIGHT 480
 
 
+int main(int argc, char * argv[]) {
 
-
-int main(void) {
 
 	GLFWwindow* window;
 
@@ -26,7 +31,7 @@ int main(void) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Serpent", NULL, NULL);
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Serpent", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -43,7 +48,7 @@ int main(void) {
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	{
-		float positions[] = {
+		/*float positions[] = {
 			-0.5f, -0.5f,
 			 0.5f, -0.5f,
 			 0.5f,  0.5f,
@@ -68,7 +73,7 @@ int main(void) {
 
 		IndexBuffer ib(indices, 6);
 
-		Shader shader("res/shaders/Base.shader");
+		Shader shader("./res/shaders/Base.shader");
 		shader.Bind();
 		
 		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
@@ -76,27 +81,34 @@ int main(void) {
 		va.Unbind();
 		shader.Unbind();
 		vb.Unbind();
-		ib.Unbind();
+		ib.Unbind();*/
 
 		Renderer renderer;
+		vec4<int> Color = { 200,200,200,25 };
+		Page page(&renderer, Color, WIDTH, HEIGHT, (char*)"Serpent");
+		Generator::m_Page = &page;
+		Interpreter::Interpret(argc, argv);
+		
+		// going to need an AddObject function of some sort
 
-		float r = 0.0f;
-		float increment = 0.05f;
+
+		/*float r = 0.0f;
+		float increment = 0.05f;*/
 
 		/* Loop until the user closes the window */
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
-			renderer.Clear();
 
-			shader.Bind();
-			shader.SetUniform4f("u_Color", r, 0.3f, 0.6f, 0.1f);
+			//shader.Bind();
+			//shader.SetUniform4f("u_Color", r, 0.3f, 0.6f, 0.1f);
 			
-			renderer.Draw(va, ib, shader);
+			Generator::m_Page->Draw();
+			//renderer.Draw(va, ib, shader);
 
-			if (r > 1.0f || r < 0.0f) increment *= -1;
+			//if (r > 1.0f || r < 0.0f) increment *= -1;
 			
-			r += increment;
+			//r += increment;
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);
 

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Generator.cpp" />
     <ClCompile Include="src\Page\Object.cpp" />
     <ClCompile Include="src\Interpreter.cpp" />
     <ClCompile Include="src\Page\Page.cpp" />
@@ -33,9 +34,11 @@
     <None Include="res\shaders\Base.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Generator.h" />
     <ClInclude Include="src\Page\Object.h" />
     <ClInclude Include="src\Interpreter.h" />
     <ClInclude Include="src\Page\Page.h" />
+    <ClInclude Include="src\Page\utils\functions.h" />
     <ClInclude Include="src\Page\utils\types.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\IndexBuffer.h" />

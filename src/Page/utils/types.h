@@ -9,13 +9,14 @@ typedef struct vec2 {
 	int y = 0;
 } vec2;
 
-typedef struct vec4 {
-	int operator[](int i) { return i == 0 ? R : i == 1 ? G : B; }
-	int R = 0;
-	int G = 0;
-	int B = 0;
-	int A = 255;
-} vec4;
+template<typename T>
+struct vec4 {
+	T operator[](int i) { return i == 0 ? R : i == 1 ? G : B; }
+	T R;
+	T G;
+	T B;
+	T A;
+};
 
 typedef struct radians {
 	double val = 0.0f;

@@ -1,15 +1,22 @@
 #include "Interpreter.h"
+#include "Generator.h"
 
 int Interpreter::Interpret(int argc, char* argv[]) {
 	char* filepath = argv[1];
 	printf("%s\n", filepath);
 	std::vector<std::string> lines = readFile(filepath);
-	for (unsigned int i = 0; i < lines.size(); i++) {
+	for (unsigned int i = 0; i < lines.size(); ++i) {
 		// this will be pre-processed, every line is either an object or a preset.
-		std::string line = lines[i];
-		std::string p_id = getContent(lines[i].c_str(), lines[i].length(), '[', ']');
-		if (p_id == "") { //no id - so it's a preset
-			std::string presetName = getContent(lines[i].c_str(), lines[i].length(), '(', ')');
+		if (lines[i][0] == '(') { //no id - so it's a preset
+			std::string presetName = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '(', ')');
+			std::string presetBody = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '{', '}');
+			Generator::GeneratePreset(presetName, Interpreter::split(presetBody, ';'));
+		}
+		else if (lines[i][0] == '[') { //id - known or not
+			if (Interpreter::getContent(lines[i].c_str(), lines[i].length(), '[', ']') == "body") {
+				std::string body = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '{', '}');
+				Generator::GeneratePage(Interpreter::split(body, ';'));
+			}
 		}
 	}
 	return 0;

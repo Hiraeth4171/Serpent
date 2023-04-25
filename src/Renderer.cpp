@@ -21,12 +21,19 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	ib.Bind();
 	GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
+
 Renderer::Renderer()
 {
 }
 
 Renderer::~Renderer()
 {
+}
+
+void Renderer::ColorClear (vec4<int> Color) const 
+{
+	GLCall(glClearColor(Color.R/255.0f, Color.G/255.0f, Color.B/ 255.0f, Color.A/255.0f));
+	Clear();
 }
 
 void Renderer::Clear() const

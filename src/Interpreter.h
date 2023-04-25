@@ -7,7 +7,7 @@
 
 class Interpreter {
 public:
-	int Interpret(int argc, char* argv[]);
+	static int Interpret(int argc, char* argv[]);
 	static std::vector<std::string> readFile(char* filepath) {
 		std::ifstream stream(filepath);
 		std::vector<std::string> lines;
@@ -15,7 +15,20 @@ public:
 		while (std::getline(stream, line)) lines.push_back(line);
 		return lines;
 	}
-	std::string getContent(const char* string, unsigned int length, char start, char end);
+	static std::vector<std::string> split(std::string str, char det) {
+		std::vector<std::string> out;
+		std::string temp;
+		for (unsigned int i = 0; i < str.length(); ++i)
+		{
+			temp += str[i];
+			if (str[i] == det) {
+				out.push_back(temp);
+				temp = "";
+			}
+		}
+		return out;
+	}
+	static std::string getContent(const char* string, unsigned int length, char start, char end);
 };
 
 class Preprocesser {
@@ -24,4 +37,3 @@ private:
 	void splitLine(std::string* line);
 	char* stripString(const char* line, int len);
 };
-
