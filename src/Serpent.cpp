@@ -2,16 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include "Renderer.h"
-
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
-#include "VertexArray.h"
 #include <iostream>
-#include "Shader.h"
-#include "Page/Page.h"
 #include "Interpreter.h"
-#include "Generator.h"
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -84,11 +76,10 @@ int main(int argc, char * argv[]) {
 		ib.Unbind();*/
 
 		Renderer renderer;
-		vec4<int> Color = { 200,200,200,25 };
-		Page page(&renderer, Color, WIDTH, HEIGHT, (char*)"Serpent");
-		Generator::m_Page = &page;
-		Interpreter::Interpret(argc, argv);
-		
+		Page page(&renderer, WIDTH, HEIGHT, (char*)"Serpent");
+		Generator generator(&page);
+		Interpreter interpeter(generator);
+		interpeter.Interpret(argc, argv);
 		// going to need an AddObject function of some sort
 
 
@@ -103,7 +94,7 @@ int main(int argc, char * argv[]) {
 			//shader.Bind();
 			//shader.SetUniform4f("u_Color", r, 0.3f, 0.6f, 0.1f);
 			
-			Generator::m_Page->Draw();
+			generator.m_Page->Draw();
 			//renderer.Draw(va, ib, shader);
 
 			//if (r > 1.0f || r < 0.0f) increment *= -1;

@@ -1,22 +1,36 @@
 #include "Interpreter.h"
-#include "Generator.h"
 
-int Interpreter::Interpret(int argc, char* argv[]) {
+int Interpreter::Interpret(int argc, char** argv) {
 	char* filepath = argv[1];
-	printf("%s\n", filepath);
-	std::vector<std::string> lines = readFile(filepath);
+	std::string line = "";
+	std::vector<std::string> lines = Preprocesser::Process(argc, argv, &line);
+
 	for (unsigned int i = 0; i < lines.size(); ++i) {
+		printf("%c", lines[i].c_str()[0]);
 		// this will be pre-processed, every line is either an object or a preset.
 		if (lines[i][0] == '(') { //no id - so it's a preset
 			std::string presetName = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '(', ')');
 			std::string presetBody = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '{', '}');
-			Generator::GeneratePreset(presetName, Interpreter::split(presetBody, ';'));
+			m_Generator.GeneratePreset(presetName, split(presetBody, ';'));
 		}
-		else if (lines[i][0] == '[') { //id - known or not
-			if (Interpreter::getContent(lines[i].c_str(), lines[i].length(), '[', ']') == "body") {
-				std::string body = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '{', '}');
-				Generator::GeneratePage(Interpreter::split(body, ';'));
+		else if (lines[i].c_str()[0] == '[') { //id - known or not
+			printf("somethin");
+			std::string content = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '[', ']');
+			std::string body = Interpreter::getContent(lines[i].c_str(), lines[i].length(), '{', '}');
+
+			printf("\n\n%s, %s\n\n", content.c_str(), body.c_str());
+
+			if (content == "body") {
+				m_Generator.GeneratePage(split(body, ';'));
+				printf("Finished Generating Page");
 			}
+			else {
+				printf("Object Generation Started.");
+				m_Generator.GenerateObject(content, split(body, ';'));
+			}
+		}
+		else {
+			printf("%d", lines[i].c_str()[0]);
 		}
 	}
 	return 0;
@@ -31,12 +45,12 @@ std::string Interpreter::getContent(const char* string, unsigned int length, cha
 		char ch = string[i];
 		if (ch == start) { count += 1; foundFlag = true; }
 		if (ch == end) { count -= 1; }
-		if (foundFlag) out += ch;
+		if (foundFlag && ch != start && ch != end) out += ch;
 	}
 	return out;
 }
 
-int Preprocesser::Process(int argc, char* argv[]) {
+std::vector<std::string> Preprocesser::Process(int argc, char* argv[], std::string *out) {
 		char* filepath = argv[1];
 		std::string outLine;
 		std::vector<std::string> lines = Interpreter::readFile(filepath);
@@ -47,25 +61,30 @@ int Preprocesser::Process(int argc, char* argv[]) {
 			if (line[0] == '#') continue; // consider these comments for now
 			outLine += line;
 		}
-		splitLine(&outLine);
-		printf(outLine.c_str());
-		return 0;
+		;
+		return splitLine(&outLine);
 }
 
-void Preprocesser::splitLine(std::string* line)
+std::vector<std::string> Preprocesser::splitLine(std::string* line)
 {
+	std::vector<std::string> out;
 	bool foundFlag = false;
 	int counter = 0;
-	for (unsigned int i = 0; i < line->length(); i++) {
+	std::string temp = "";
+	for (unsigned int i = 0; i < line->length(); ++i) {
 		if (counter == 0 && foundFlag) {
-			line->insert(i, "\n");
+			if (temp != "") out.push_back(temp);
+			temp = "";
 			foundFlag = false;
 		}
 		if (line->c_str()[i] == '{') {
 			counter++; foundFlag = true;
 		}
 		if (line->c_str()[i] == '}') counter--;
+		temp += line->c_str()[i];
 	}
+	printf(line->c_str());
+	return out;
 }
 
 char* Preprocesser::stripString(const char* line, int len)
@@ -77,9 +96,8 @@ char* Preprocesser::stripString(const char* line, int len)
 		return NULL;
 	}
 	char* ptr = out;
-	int i = 0;
 	while (*line != '\0') {
-		if (*line != ' ' && *line != '\t' && *line != '\n') {
+		if (*line > 33) {
 			*ptr++ = *line;
 		}
 		line++;
